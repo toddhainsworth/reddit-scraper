@@ -77,4 +77,3 @@ print("Scraping r/{} - please hold...".format(sub))
 print("Sorting by \"{}\"".format(sort))
 
 politics_links = scrape_sub(sub, sort)
-print(politics_links[0])
