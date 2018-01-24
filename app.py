@@ -1,8 +1,19 @@
 from bs4 import BeautifulSoup
 import requests
 
+import sys
+
 BASE_URL = "http://www.reddit.com/{}"
 USER_AGENT = 'Reddit meme scraper'
+DEFAULT_SUB = "politics"
+
+"""
+Get the sub requested from the command-line args or use the default
+"""
+def get_args_sub():
+  args = sys.argv
+  sub = args[1] if len(args) > 1 else DEFAULT_SUB
+  return sub
 
 """
 Structure and send a request for the given URL
@@ -32,4 +43,7 @@ def scrape_sub(sub):
   links = translate_response(resp)
   return links
 
-politics_links = scrape_sub("r/politics")
+sub = get_args_sub()
+print("Scraping r/{} - please hold...".format(sub))
+politics_links = scrape_sub("r/{}".format(sub))
+print(politics_links[0])
