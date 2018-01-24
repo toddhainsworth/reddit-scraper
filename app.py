@@ -3,9 +3,8 @@ import requests
 
 import sys
 
-BASE_URL = "http://www.reddit.com/{}"
+BASE_URL = "http://www.reddit.com/r/{}"
 USER_AGENT = "Reddit meme scraper"
-
 DEFAULT_SUB = "politics"
 DEFAULT_SORT = "top"
 
@@ -24,19 +23,29 @@ def get_sub():
   return sub
 
 """
+Get the sort field requested from the command-line args or use the default
+"""
+def get_sort():
+  args = sys.argv
+  sort = args[2] if len(args) > 2 else DEFAULT_SORT
+  sort = sort if sort in VALID_SORTS else DEFAULT_SORT
+  return sort
+
+"""
 Perform the various formats to generate the url
 """
-def format_url(url):
-  sort = QUERY_STRING_SORT.format(DEFAULT_SORT)
-  query = "{}&{}".format(sort, QUERY_STRING_TODAY)
-  url = "{}/{}/?{}".format(url, DEFAULT_SORT, query)
+def format_url(sub, sort):
+  url = BASE_URL.format(sub)
+  query = "sort={}&{}".format(sort, QUERY_STRING_TODAY)
+  url = "{}/{}/?{}".format(url, sort, query)
+  print(url)
   return url
 
 """
-Structure and send a request for the given URL
+Structure and send a request for the given sub
 """
-def request(url):
-  url = format_url(url)
+def request(sub, sort):
+  url = format_url(sub, sort)
   return requests.get(url, headers={"User-agent": USER_AGENT})
 
 """
@@ -56,11 +65,16 @@ def get_title_and_url(link):
 """
 Scrape the given sub for each of it"s entries
 """
-def scrape_sub(sub):
-  resp = request(BASE_URL.format(sub))
+def scrape_sub(sub, sort):
+  resp = request(sub, sort=sort)
   links = translate_response(resp)
   return links
 
 sub = get_sub()
+sort = get_sort()
+
 print("Scraping r/{} - please hold...".format(sub))
-politics_links = scrape_sub("r/{}".format(sub))
+print("Sorting by \"{}\"".format(sort))
+
+politics_links = scrape_sub(sub, sort)
+print(politics_links[0])
