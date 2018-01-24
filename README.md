@@ -2,7 +2,7 @@
 
 It's super messy and all in one file, don't judge just yet!
 
-Currently it just gives the first result as a Python key-value object
+Currently it just gives the first result to allow quicker testing
 
 ## Usage
 
