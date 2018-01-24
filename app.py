@@ -77,3 +77,9 @@ print("Scraping r/{} - please hold...".format(sub))
 print("Sorting by \"{}\"".format(sort))
 
 politics_links = scrape_sub(sub, sort)
+first = politics_links[0] if len(politics_links) > 0 else None
+
+if first is None:
+  print("Nothing to show!")
+else:
+  print("Title: {}\nLink: {}".format(first['title'], first['link']))
